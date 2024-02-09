@@ -1,7 +1,8 @@
 import {Component} from 'react'
+
 import './index.css'
 
-const initialCountryAndCapitalsList = [
+const countryAndCapitalsList = [
   {
     id: 'NEW_DELHI',
     capitalDisplayText: 'New Delhi',
@@ -29,45 +30,52 @@ const initialCountryAndCapitalsList = [
   },
 ]
 
-// Write your code here
 class Capitals extends Component {
   state = {
-    countryAndCapitalsList: initialCountryAndCapitalsList,
-    activeId: initialCountryAndCapitalsList[0].id,
+    activeCapitalId: countryAndCapitalsList[0].id,
   }
 
-  onClickItem = event => {
-    this.setState({
-      activeId: event.target.value,
-    })
+  onChangeCapital = event => {
+    this.setState({activeCapitalId: event.target.value})
   }
 
-  getFilteredCountry = () => {
-    const {countryAndCapitalsList, activeId} = this.state
-    const filteredCountry = countryAndCapitalsList.filter(
-      eachCountryDetails => eachCountryDetails.id === activeId,
+  getCountry = () => {
+    const {activeCapitalId} = this.state
+
+    const activeCountryAndCapital = countryAndCapitalsList.find(
+      eachCapital => eachCapital.id === activeCapitalId,
     )
 
-    return filteredCountry
+    return activeCountryAndCapital.country
   }
 
   render() {
-    const {activeId} = this.state
-    const filteredCountry = this.getFilteredCountry()
+    const {activeCapitalId} = this.state
+    const country = this.getCountry(activeCapitalId)
 
     return (
-      <div>
-        <div>
-          <h1>Countries And Capitals</h1>
-          <select value={activeId} onChange={this.onClickItem}>
-            {initialCountryAndCapitalsList.map(each => (
-              <option value={each.id}>{each.capitalDisplayText}</option>
-            ))}
-          </select>
-          <span> is capital of which country?</span>
-          {filteredCountry.map(each => (
-            <li key={each.id}>{each.country}</li>
-          ))}
+      <div className="app-container">
+        <div className="capitals-container">
+          <h1 className="heading">Countries And Capitals</h1>
+          <div className="question-container">
+            <select
+              className="capital-select"
+              onChange={this.onChangeCapital}
+              value={activeCapitalId}
+            >
+              {countryAndCapitalsList.map(eachCapital => (
+                <option
+                  key={eachCapital.id}
+                  value={eachCapital.id}
+                  className="option"
+                >
+                  {eachCapital.capitalDisplayText}
+                </option>
+              ))}
+            </select>
+            <p className="question">is capital of which country?</p>
+          </div>
+          <p className="country">{country}</p>
         </div>
       </div>
     )
